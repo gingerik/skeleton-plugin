@@ -1,0 +1,30 @@
+sudo: true
+
+language: node_js
+
+node_js:
+ - 4.2
+
+env:
+  global:
+  - secure: "mCrx8HXUj2NZ4NiWP+e2fVNNO8s/i/QPz0qqJoy76LfXbuYr1iGs01uBWwCt89LGo/ZuereE12XloqaNUfszradHEfJEBFC+xoWL61fhJBFVuUN5VQy324BOP5WhiD5dyStQcGQeI4Ng/ACwrSr2jhVUIHHwMQg8d0zBeajrWnuMLGsyObu6rR2yOtqu81E2agkFGgE4EZZ1Oi8OkEno6szf2QMh/Z5SDPBlLZ962doLq9QJoCFDu6cVZXlR2ip9C96gDRayN6keDrCizUVImxskfO4/FDAVGFJ3qHZ3uDByB9yB50+8Mz9sdsEGvDCHl/zd8za5hJSWB6N+Mx+Na+nRWUtIfGRikfRjI4QqY95l+U+N0G0oPFxKJ8oP/vcdfIOgGmaosMyHaBl2dpGRILVbg9y2t4a9XwK0d/nnWaAABPE2YY8Wb5fktDcy2d/cx8Lre4qIB4Mn3e5o7UZNnnnYBZa9F69MA34iSu4LnoJJhSIFTXQQax8UWYGks4NHJcmqJNWCdjWJn+oyE5DU/PgF2lWtjBQhhtrA4OosflcD0T/nNgtc2NT6ZGDdaa21GBBtrBYs7AqWG2+qyFzpJ3q3CmvEN2VcZeQz+2WWW55icohcl+2zH1y5Cot7ro74L3RldzmBs1z6iU0jJoidy0zlmHFYP3Cp6SFACSQgXq0="
+
+before_install:
+  - npm install -g jspm gulp karma-cli
+  - jspm config registries.github.auth $JSPM_GITHUB_AUTH_TOKEN
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sudo apt-get update
+  - sudo apt-get install -y libappindicator1 fonts-liberation
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
+
+install:
+  - npm install
+  - jspm install -y
+
+script:
+  - gulp lint
+  - gulp build
+  - gulp test
